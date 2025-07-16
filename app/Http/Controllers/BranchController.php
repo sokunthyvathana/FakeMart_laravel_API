@@ -118,14 +118,28 @@ class BranchController extends Controller
      *     )
      * )
      */
-    function update(Request $request){
+    public function update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id'             => ['bail', 'required', 'exists:branches,id'],
+            'name'           => ['bail', 'required', 'string', 'max:255'],
+            'location'       => ['bail', 'required', 'string', 'max:255'],
+            'contact_number' => ['bail', 'required', 'string', 'max:20'],
+        ]);
+
+        $validationResult = Validation::errorMessage($validator);
+        if ($validationResult !== 0) {
+            return $validationResult;
+        }
+
         $branch = Branch::find($request->id);
         if ($branch != null) {
-            $branch -> name = $request -> name;
-            $branch -> location = $request -> location;
-            $branch -> contact_number = $request -> contact_number;
-            $branch -> save();
+            $branch->name = $request->name;
+            $branch->location = $request->location;
+            $branch->contact_number = $request->contact_number;
+            $branch->save();
         }
+
         return response()->json([
             'status' => 'Success',
             'new_data' => $branch,
@@ -151,7 +165,17 @@ class BranchController extends Controller
      *     )
      * )
      */
-    function delete(Request $request){
+    function delete(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:branches,id',
+        ]);
+
+        $validationResult = Validation::errorMessage($validator);
+        if ($validationResult !== 0) {
+            return $validationResult;
+        }
+
         $branch = Branch::find($request->id);
         if ($branch != null) {
             $branch->delete();
@@ -160,14 +184,14 @@ class BranchController extends Controller
                 'old_data' => $branch,
                 'status_code' => 200
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => 'resource not found !',
                 'status_code' => 200
             ]);
         }
-
     }
+
     //
 
 }
