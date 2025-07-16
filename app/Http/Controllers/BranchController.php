@@ -7,9 +7,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Helpers\Validation\Validation;
 
+/**
+ * @OA\Info(
+ *     version="1.0.0",
+ *     title="FakeMart Laravel API",
+ *     description="API documentation for managing products, branches, and more.",
+ *     @OA\Contact(
+ *         email="sokunthyvathana@gmail.com"
+ *     )
+ * )
+ */
 
 class BranchController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/branch/lists",
+     *     summary="Get list of branch",
+     *     tags={"Branch"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation"
+     *     )
+     * )
+     */
+    public function index()
+    {
+        return Branch::all();
+    }
+
+
     function lists(Request $request)
     {
         $data = Branch::all();
@@ -19,6 +46,28 @@ class BranchController extends Controller
             'status_code' => 200
         ]);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/branch/create",
+     *     summary="Create a new branch",
+     *     tags={"Branch"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","location","contact_number"},
+     *             @OA\Property(property="name", type="string", example="Branch A"),
+     *             @OA\Property(property="location", type="string", example="Phnom Penh"),
+     *             @OA\Property(property="contact_number", type="string", example="012345678")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch created successfully"
+     *     )
+     * )
+     */
+
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -47,6 +96,28 @@ class BranchController extends Controller
             'status_code' => 200
         ], 200);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/branch/update",
+     *     summary="Update a branch by ID",
+     *     tags={"Branch"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id","name","location","contact_number"},
+     *             @OA\Property(property="id", type="integer", example=1),
+     *             @OA\Property(property="name", type="string", example="Updated Branch"),
+     *             @OA\Property(property="location", type="string", example="New Location"),
+     *             @OA\Property(property="contact_number", type="string", example="098765432")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch updated successfully"
+     *     )
+     * )
+     */
     function update(Request $request){
         $branch = Branch::find($request->id);
         if ($branch != null) {
@@ -61,6 +132,25 @@ class BranchController extends Controller
             'status_code' => 200
         ]);
     }
+
+    /**
+     * @OA\Post (
+     *     path="/api/branch/delete",
+     *     summary="Delete a branch by ID",
+     *     tags={"Branch"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"id"},
+     *             @OA\Property(property="id", type="integer", example=1)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Branch deleted successfully"
+     *     )
+     * )
+     */
     function delete(Request $request){
         $branch = Branch::find($request->id);
         if ($branch != null) {

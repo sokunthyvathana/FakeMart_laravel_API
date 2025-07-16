@@ -1,0 +1,157 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "FakeMart Laravel API",
+        "description": "API documentation for managing products, branches, and more.",
+        "contact": {
+            "email": "sokunthyvathana@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/branch/lists": {
+            "get": {
+                "tags": [
+                    "Branch"
+                ],
+                "summary": "Get list of branch",
+                "operationId": "1a7f8e78ade478b8a54d3769e7b1910b",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/branch/create": {
+            "post": {
+                "tags": [
+                    "Branch"
+                ],
+                "summary": "Create a new branch",
+                "operationId": "fab238b34aa9799a27eca85eda3b4ec8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "location",
+                                    "contact_number"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Branch A"
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "Phnom Penh"
+                                    },
+                                    "contact_number": {
+                                        "type": "string",
+                                        "example": "012345678"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Branch created successfully"
+                    }
+                }
+            }
+        },
+        "/api/branch/update": {
+            "post": {
+                "tags": [
+                    "Branch"
+                ],
+                "summary": "Update a branch by ID",
+                "operationId": "8567a53a51ac0a5bf91edb6f23e4f1ed",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id",
+                                    "name",
+                                    "location",
+                                    "contact_number"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Branch"
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "New Location"
+                                    },
+                                    "contact_number": {
+                                        "type": "string",
+                                        "example": "098765432"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Branch updated successfully"
+                    }
+                }
+            }
+        },
+        "/api/branch/delete": {
+            "post": {
+                "tags": [
+                    "Branch"
+                ],
+                "summary": "Delete a branch by ID",
+                "operationId": "49e5060c9700e82eae2a3008497a80bc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Branch deleted successfully"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Branch",
+            "description": "Branch"
+        }
+    ]
+}
