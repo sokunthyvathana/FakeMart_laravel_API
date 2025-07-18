@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BranchController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -13,3 +12,7 @@ include 'admin/branch.php';
 include 'admin/users.php';
 include 'admin/category.php';
 include 'admin/invoice.php';
+include 'admin/staff.php';
+include 'admin/product.php';
+include 'admin/position.php';
+include 'admin/invoiceItem.php';

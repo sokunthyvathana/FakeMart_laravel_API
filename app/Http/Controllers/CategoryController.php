@@ -97,7 +97,8 @@ class CategoryController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"name"},
-     *             @OA\Property(property="name", type="string")
+     *             @OA\Property(property="name", type="string", description="The name of the category"),
+     *             @OA\Property(property="description", type="string", description="The description of the category", nullable=true)
      *         )
      *     ),
      *     @OA\Response(response=200, description="Category created"),
@@ -105,7 +106,6 @@ class CategoryController extends Controller
      * )
      */
     function saveCategory(Request $request){
-
         $rules = [
             'name'    => 'required|string|max:255',
             'description' => 'nullable|string|max:1000' // optional
@@ -113,7 +113,6 @@ class CategoryController extends Controller
 
         $messages = [
             'name.required'    => 'Category name is not allowed to be null.'
-
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -123,11 +122,11 @@ class CategoryController extends Controller
             return $result;
         }
         $category = new Category();
-        $category -> name = $request->name;
-        $category-> description = $request->description ?? null;
+        $category->name = $request->name;
+        $category->description = $request->description ?? null;
 
-        $category -> save();
-        return response() -> json([
+        $category->save();
+        return response()->json([
             'status' => 'success',
             'new_category' => $category,
             'status_code' => 200
@@ -143,38 +142,50 @@ class CategoryController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"id", "name"},
-     *             @OA\Property(property="id", type="integer"),
-     *             @OA\Property(property="name", type="string")
+     *             @OA\Property(property="id", type="integer", description="The ID of the category to update"),
+     *             @OA\Property(property="name", type="string", description="The name of the category"),
+     *             @OA\Property(property="description", type="string", description="The description of the category", nullable=true)
      *         )
      *     ),
      *     @OA\Response(response=200, description="Category updated"),
-     *     @OA\Response(response=422, description="Validation error")
+     *     @OA\Response(response=422, description="Validation error"),
+     *     @OA\Response(response=404, description="Category not found")
      * )
      */
     function updateCategory(Request $request){
         $category = Category::find($request->id);
-        if ($category!= null){
-            $rules = [
-                'name'    => 'required|string|max:255'
-            ];
-
-            $messages = [
-                'name.required'    => 'Category name is not allowed to be null.'
-            ];
-
-            $validator = Validator::make($request->all(), $rules, $messages);
-
-            $result = Validation::errorMessage($validator);
-            if ($result !== 0) {
-                return $result;
-            }
-            $category -> name = $request->name;
-            $category->save();
+        if ($category == null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+                'status_code' => 404
+            ], 404);
         }
+
+        $rules = [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000'
+        ];
+
+        $messages = [
+            'name.required' => 'Category name is not allowed to be null.'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $result = Validation::errorMessage($validator);
+        if ($result !== 0) {
+            return $result;
+        }
+
+        $category->name = $request->name;
+        $category->description = $request->description ?? $category->description;
+
+        $category->save();
         return response()->json([
-            'status'=> 'success',
-            'updated_data'=>$category,
-            'status_code'=>200
+            'status' => 'success',
+            'updated_data' => $category,
+            'status_code' => 200
         ]);
     }
 
