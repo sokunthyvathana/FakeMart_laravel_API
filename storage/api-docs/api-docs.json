@@ -1,9 +1,11 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Sokunthy Vathana",
+        "title": "FakeMart Laravel API",
         "description": "API documentation for managing products, branches, and more.",
         "contact": {
+            "name": "Sokunthy Vathana",
+            "url": "https://github.com/sokunthyvathana",
             "email": "sokunthyvathana@gmail.com"
         },
         "version": "1.0.0"

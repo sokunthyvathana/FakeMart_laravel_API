@@ -11,22 +11,27 @@ use App\Helpers\Validation\Validation;
  * @OA\Info(
  *     version="1.0.0",
  *     title="FakeMart Laravel API",
- *     title="Sokunthy Vathana",
  *     description="API documentation for managing products, branches, and more.",
  *     @OA\Contact(
- *         email="sokunthyvathana@gmail.com"
+ *         name="Sokunthy Vathana",
+ *          email="sokunthyvathana@gmail.com",
+ *          url="https://github.com/sokunthyvathana"
  *     )
  * )
  */
 
+
+
 class BranchController extends Controller
 {
+
     /**
      * @OA\Get(
      *     path="/api/branches",
      *     summary="Get paginated list of branches",
      *     description="Returns a paginated list of branches with optional query parameters for page size and limit.",
      *     tags={"Branch"},
+     *
      *
      *     @OA\Parameter(
      *         name="_pageLimit",
