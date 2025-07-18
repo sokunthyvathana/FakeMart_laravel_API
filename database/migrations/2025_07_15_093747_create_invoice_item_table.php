@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('price');
             $table->decimal('total', 10, 2)->storedAs('qty * price');
             $table->timestamps();
+            $table->softDeletes();
         });
 
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
+            $table->softDeletes();
         });
 
     }

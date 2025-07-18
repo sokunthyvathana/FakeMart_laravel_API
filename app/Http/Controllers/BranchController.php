@@ -58,7 +58,7 @@ class BranchController extends Controller
      *                 @OA\Items(
      *                     type="object",
      *                     @OA\Property(property="id", type="integer", example=1),
-     *                     @OA\Property(property="branch_name", type="string", example="Phnom Penh Branch"),
+     *                     @OA\Property(property="name", type="string", example="Phnom Penh Branch"),
      *                     @OA\Property(property="location", type="string", example="Phnom Penh"),
      *                     @OA\Property(property="contact_number", type="string", example="012345678")
      *                 )
@@ -107,7 +107,7 @@ class BranchController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="data", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="branch_name", type="string", example="Phnom Penh Branch"),
+     *                 @OA\Property(property="name", type="string", example="Phnom Penh Branch"),
      *                 @OA\Property(property="location", type="string", example="Phnom Penh"),
      *                 @OA\Property(property="contact_number", type="string", example="012345678")
      *             ),
@@ -151,7 +151,7 @@ class BranchController extends Controller
      *         required=true,
      *         @OA\JsonContent(
      *             required={"branch_name", "location", "contact_number"},
-     *             @OA\Property(property="branch_name", type="string", example="Phnom Penh Branch"),
+     *             @OA\Property(property="name", type="string", example="Phnom Penh Branch"),
      *             @OA\Property(property="location", type="string", example="Phnom Penh"),
      *             @OA\Property(property="contact_number", type="string", example="012345678")
      *         )
@@ -164,7 +164,7 @@ class BranchController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="new_branch", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="branch_name", type="string", example="Phnom Penh Branch"),
+     *                 @OA\Property(property="name", type="string", example="Phnom Penh Branch"),
      *                 @OA\Property(property="location", type="string", example="Phnom Penh"),
      *                 @OA\Property(property="contact_number", type="string", example="012345678")
      *             ),
@@ -178,7 +178,7 @@ class BranchController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="string", example="error"),
      *             @OA\Property(property="errors", type="object",
-     *                 @OA\Property(property="branch_name", type="string", example="Branch name is not allowed to be null.")
+     *                 @OA\Property(property="name", type="string", example="Branch name is not allowed to be null.")
      *             ),
      *             @OA\Property(property="status_code", type="integer", example=422)
      *         )
@@ -188,24 +188,26 @@ class BranchController extends Controller
     function saveBranch(Request $request){
 
         $rules = [
-            'branch_name'    => 'required|string|max:255',
+            'name'    => 'required|string|max:255',
             'location'       => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
         ];
 
         $messages = [
-            'branch_name.required'    => 'Branch name is not allowed to be null.',
+            'name.required'    => 'Branch name is not allowed to be null.',
             'location.required'       => 'Location is not allowed to be null.',
             'contact_number.required' => 'Contact number is not allowed to be null.',
         ];
 
-        $result = ValidationService::validate($request->all(), $rules , $messages);
-        if ($result !== true) {
-            return response()->json($result, 422);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $result = Validation::errorMessage($validator);
+        if ($result !== 0) {
+            return $result;
         }
 
         $branch = new Branch();
-        $branch -> branch_name = $request->branch_name;
+        $branch -> name = $request->name;
         $branch -> location = $request -> location;
         $branch -> contact_number = $request -> contact_number;
         $branch -> save();
@@ -228,7 +230,7 @@ class BranchController extends Controller
      *         @OA\JsonContent(
      *             required={"id", "branch_name", "location", "contact_number"},
      *             @OA\Property(property="id", type="integer", example=1),
-     *             @OA\Property(property="branch_name", type="string", example="Updated Branch Name"),
+     *             @OA\Property(property="name", type="string", example="Updated Branch Name"),
      *             @OA\Property(property="location", type="string", example="Updated Location"),
      *             @OA\Property(property="contact_number", type="string", example="012345678")
      *         )
@@ -241,7 +243,7 @@ class BranchController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="updated_data", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="branch_name", type="string", example="Updated Branch Name"),
+     *                 @OA\Property(property="name", type="string", example="Updated Branch Name"),
      *                 @OA\Property(property="location", type="string", example="Updated Location"),
      *                 @OA\Property(property="contact_number", type="string", example="012345678")
      *             ),
@@ -263,22 +265,25 @@ class BranchController extends Controller
         $branch = Branch::find($request->id);
         if ($branch != null){
             $rules = [
-                'branch_name'    => 'required|string|max:255',
+                'name'    => 'required|string|max:255',
                 'location'       => 'required|string|max:255',
                 'contact_number' => 'required|string|max:20',
             ];
 
             $messages = [
-                'branch_name.required'    => 'Branch name is not allowed to be null.',
+                'name.required'    => 'Branch name is not allowed to be null.',
                 'location.required'       => 'Location is not allowed to be null.',
                 'contact_number.required' => 'Contact number is not allowed to be null.',
             ];
 
-            $result = ValidationService::validate($request->all(), $rules , $messages);
-            if ($result !== true) {
-                return response()->json($result, 422);
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            $result = Validation::errorMessage($validator);
+            if ($result !== 0) {
+                return $result;
             }
-            $branch->branch_name = $request->branch_name;
+
+            $branch->name = $request->name;
             $branch->location = $request->location;
             $branch->contact_number = $request->contact_number;
             $branch->save();
@@ -365,7 +370,7 @@ class BranchController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="deleted_data", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="branch_name", type="string", example="Kampot Branch"),
+     *                 @OA\Property(property="name", type="string", example="Kampot Branch"),
      *                 @OA\Property(property="location", type="string", example="Kampot"),
      *                 @OA\Property(property="contact_number", type="string", example="012345678"),
      *                 @OA\Property(property="deleted_at", type="string", example="2025-07-03T10:23:45.000000Z")
@@ -423,7 +428,7 @@ class BranchController extends Controller
      *             @OA\Property(property="status", type="string", example="success"),
      *             @OA\Property(property="restored_data", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="branch_name", type="string", example="Restored Branch"),
+     *                 @OA\Property(property="name", type="string", example="Restored Branch"),
      *                 @OA\Property(property="location", type="string", example="Siem Reap"),
      *                 @OA\Property(property="contact_number", type="string", example="012345678"),
      *                 @OA\Property(property="deleted_at", type="string", nullable=true, example=null)

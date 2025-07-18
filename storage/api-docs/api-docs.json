@@ -74,7 +74,7 @@
                                                         "type": "integer",
                                                         "example": 1
                                                     },
-                                                    "branch_name": {
+                                                    "name": {
                                                         "type": "string",
                                                         "example": "Phnom Penh Branch"
                                                     },
@@ -140,7 +140,7 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Phnom Penh Branch"
                                                 },
@@ -207,7 +207,7 @@
                                     "contact_number"
                                 ],
                                 "properties": {
-                                    "branch_name": {
+                                    "name": {
                                         "type": "string",
                                         "example": "Phnom Penh Branch"
                                     },
@@ -242,7 +242,7 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Phnom Penh Branch"
                                                 },
@@ -279,7 +279,7 @@
                                         },
                                         "errors": {
                                             "properties": {
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Branch name is not allowed to be null."
                                                 }
@@ -323,7 +323,7 @@
                                         "type": "integer",
                                         "example": 1
                                     },
-                                    "branch_name": {
+                                    "name": {
                                         "type": "string",
                                         "example": "Updated Branch Name"
                                     },
@@ -358,7 +358,7 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Updated Branch Name"
                                                 },
@@ -511,7 +511,7 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Kampot Branch"
                                                 },
@@ -600,7 +600,7 @@
                                                     "type": "integer",
                                                     "example": 1
                                                 },
-                                                "branch_name": {
+                                                "name": {
                                                     "type": "string",
                                                     "example": "Restored Branch"
                                                 },
@@ -884,6 +884,409 @@
                     }
                 }
             }
+        },
+        "/api/invoices": {
+            "get": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Get paginated invoices",
+                "operationId": "8ca837fa812d14a1dc61263a5c1ff525",
+                "parameters": [
+                    {
+                        "name": "_pageLimit",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    },
+                    {
+                        "name": "_pageSize",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of invoices",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "total_items": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "per_page": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/invoice/{id}": {
+            "get": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Get invoice by ID",
+                "operationId": "6ed150c6b44adbd1398a262bc6705080",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Invoice retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                }
+            }
+        },
+        "/api/invoice/create": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Create a new invoice",
+                "operationId": "3d3455ed63760b250d6f943e8df1a8d4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "new_user": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/invoice/update": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Update an existing invoice",
+                "operationId": "e8120ba5068d827ad79d58f8fe823621",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id",
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "updated_data": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                }
+            }
+        },
+        "/api/invoice/delete/force": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Permanently delete a trashed invoice",
+                "operationId": "6fc1fcb40a4bcf8cba03cd741c5c9336",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice deleted permanently",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found in trash"
+                    }
+                }
+            }
+        },
+        "/api/invoice/delete/soft": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Soft delete an invoice",
+                "operationId": "dda6cb7d18df4441006b2849f666bff1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Invoice soft deleted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "deleted_data": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found"
+                    }
+                }
+            }
+        },
+        "/api/invoice/restore/{id}": {
+            "post": {
+                "tags": [
+                    "Invoice"
+                ],
+                "summary": "Restore a soft-deleted invoice",
+                "operationId": "42614c12dacebdfcd6c2023e3aa87ff7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Invoice restored",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "restored_data": {
+                                            "type": "object"
+                                        },
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invoice not found in trash"
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -894,6 +1297,10 @@
         {
             "name": "Category",
             "description": "Category"
+        },
+        {
+            "name": "Invoice",
+            "description": "Invoice"
         }
     ]
 }

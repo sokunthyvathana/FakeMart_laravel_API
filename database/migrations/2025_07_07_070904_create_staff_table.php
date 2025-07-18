@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('nation_id_card');
             $table->timestamps();
+            $table->softDeletes();
         });
 
     }

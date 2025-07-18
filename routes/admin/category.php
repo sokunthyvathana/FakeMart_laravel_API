@@ -8,4 +8,4 @@ Route::post('/category/delete/soft',[CategoryController::class,'softDeleteCatego
 Route::post('/category/delete/force',[CategoryController::class,'forceDeleteCategory']);
 Route::post('/category/restore/{id}',[CategoryController::class,'restoreCategory']);
 Route::get('/category/{id}',[CategoryController::class,'getById']);
-?>
+

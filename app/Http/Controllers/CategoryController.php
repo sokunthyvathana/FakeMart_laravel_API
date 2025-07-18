@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Validation\Validation;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Facades\Validator;
@@ -106,7 +107,8 @@ class CategoryController extends Controller
     function saveCategory(Request $request){
 
         $rules = [
-            'name'    => 'required|string|max:255'
+            'name'    => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000' // optional
         ];
 
         $messages = [
@@ -114,12 +116,16 @@ class CategoryController extends Controller
 
         ];
 
-        $result = ValidationService::validate($request->all(), $rules , $messages);
-        if ($result !== true) {
-            return response()->json($result, 422);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        $result = Validation::errorMessage($validator);
+        if ($result !== 0) {
+            return $result;
         }
         $category = new Category();
         $category -> name = $request->name;
+        $category-> description = $request->description ?? null;
+
         $category -> save();
         return response() -> json([
             'status' => 'success',
@@ -156,9 +162,11 @@ class CategoryController extends Controller
                 'name.required'    => 'Category name is not allowed to be null.'
             ];
 
-            $result = ValidationService::validate($request->all(), $rules , $messages);
-            if ($result !== true) {
-                return response()->json($result, 422);
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            $result = Validation::errorMessage($validator);
+            if ($result !== 0) {
+                return $result;
             }
             $category -> name = $request->name;
             $category->save();
