@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('location');
             $table->string('contact_number');
             $table->timestamps();
+            $table->softDeletes();
         });
 
 
