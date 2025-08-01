@@ -10,7 +10,7 @@ use App\Helpers\Validation\Validation;
 /**
  * @OA\Info(
  *     version="1.0.0",
- *     title="FakeMart Laravel API",
+ *     title="FakeMart Laravel API",p
  *     description="API documentation for managing products, branches, and more.",
  *     @OA\Contact(
  *         name="Sokunthy Vathana",
